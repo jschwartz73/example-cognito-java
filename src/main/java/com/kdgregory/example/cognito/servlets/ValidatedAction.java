@@ -3,6 +3,7 @@ package com.kdgregory.example.cognito.servlets;
 
 import java.io.IOException;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import javax.servlet.ServletException;
@@ -10,17 +11,9 @@ import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.amazonaws.services.cognitoidp.model.*;
 import net.sf.kdgcommons.lang.StringUtil;
 import net.sf.kdgcommons.lang.ThreadUtil;
-
-import com.amazonaws.services.cognitoidp.model.AWSCognitoIdentityProviderException;
-import com.amazonaws.services.cognitoidp.model.AdminInitiateAuthRequest;
-import com.amazonaws.services.cognitoidp.model.AdminInitiateAuthResult;
-import com.amazonaws.services.cognitoidp.model.AuthFlowType;
-import com.amazonaws.services.cognitoidp.model.GetUserRequest;
-import com.amazonaws.services.cognitoidp.model.GetUserResult;
-import com.amazonaws.services.cognitoidp.model.NotAuthorizedException;
-import com.amazonaws.services.cognitoidp.model.TooManyRequestsException;
 
 
 /**
@@ -61,12 +54,12 @@ public class ValidatedAction extends AbstractCognitoServlet
                 refreshToken = cookie.getValue();
         }
 
-        if (tokenCache.checkToken(accessToken))
-        {
-            logger.debug("token was found in cache, not going to AWS");
-            reportResult(response, Constants.ResponseMessages.LOGGED_IN);
-            return;
-        }
+//        if (tokenCache.checkToken(accessToken))
+//        {
+//            logger.debug("token was found in cache, not going to AWS");
+//            reportResult(response, Constants.ResponseMessages.LOGGED_IN);
+//            return;
+//        }
 
         try
         {
@@ -75,6 +68,25 @@ public class ValidatedAction extends AbstractCognitoServlet
 
             logger.debug("successful validation for {}", authResponse.getUsername());
             tokenCache.addToken(accessToken);
+
+            logger.debug(" - User attributes:");
+            List<AttributeType> attrs = authResponse.getUserAttributes();
+            for (AttributeType aType : attrs) {
+                logger.debug("   -> {}: {}", aType.getName(), aType.getValue());
+            }
+
+            AdminListGroupsForUserRequest listGroups = new AdminListGroupsForUserRequest();
+            listGroups.setUsername(authResponse.getUsername());
+            listGroups.setLimit(50);
+            listGroups.setUserPoolId("us-east-1_CoFdD3D0I");
+            AdminListGroupsForUserResult result = cognitoClient.adminListGroupsForUser(listGroups);
+
+            logger.debug(" - Groups:");
+            List<GroupType> groups = result.getGroups();
+            for (GroupType gt : groups) {
+                logger.debug("   -> {}", gt.getGroupName());
+            }
+
             reportResult(response, Constants.ResponseMessages.LOGGED_IN);
         }
         catch (NotAuthorizedException ex)
