@@ -13,6 +13,7 @@ public abstract class Constants
     {
         public final static String  EMAIL = "EMAIL";
         public final static String  PASSWORD = "PASSWORD";
+        public final static String  VERIFICATION_CODE = "VERIFICATION";
         public final static String  TEMPORARY_PASSWORD = "TEMPORARY_PASSWORD";
     }
 

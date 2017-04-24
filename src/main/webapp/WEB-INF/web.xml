@@ -5,12 +5,12 @@
 
     <context-param>
         <param-name>cognito_pool_id</param-name>
-        <param-value>us-east-1_CoFdD3D0I</param-value>
+        <param-value>us-east-1_DHW0l3tPV</param-value>
     </context-param>
 
     <context-param>
         <param-name>cognito_client_id</param-name>
-        <param-value>4e3p745k0ok8c2hbej1hhhjqsg</param-value>
+        <param-value>2q3a356m666o6mva1f0mbuptnp</param-value>
     </context-param>
 
     <servlet>
@@ -22,7 +22,25 @@
         <url-pattern>/signin</url-pattern>
     </servlet-mapping>
 
-     <servlet>
+    <servlet>
+        <servlet-name>ForgotPassword</servlet-name>
+        <servlet-class>com.kdgregory.example.cognito.servlets.ForgotPassword</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>ForgotPassword</servlet-name>
+        <url-pattern>/forgotPassword</url-pattern>
+    </servlet-mapping>
+
+    <servlet>
+        <servlet-name>VerificationCode</servlet-name>
+        <servlet-class>com.kdgregory.example.cognito.servlets.VerificationCode</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>VerificationCode</servlet-name>
+        <url-pattern>/verificationCode</url-pattern>
+    </servlet-mapping>
+
+    <servlet>
         <servlet-name>SignUp</servlet-name>
         <servlet-class>com.kdgregory.example.cognito.servlets.SignUp</servlet-class>
     </servlet>

@@ -12,12 +12,34 @@
         password to sign in.
     <form name="signin" action="#">
         <table class="login">
-        <tr><th><label for="EMAIL">Email address:</label></th>
-            <td><input id="signinInputEmail" name="EMAIL" type="email" size=40 maxlength=128 autofocus="true"></input>
-        <tr><th><label for="PASSWORD">Password:</label></th>
-            <td><input id="signinInputPassword" name="PASSWORD" type="password"></input>
-        <tr><td>&nbsp;</td>
-            <td> <button id="signinButton" class="preferredButton" type="button">Sign In</button> </td>
+            <tr>
+                <th><label for="signinInputEmail">Email address:</label></th>
+                <td><input id="signinInputEmail" name="EMAIL" type="email" size=40 maxlength=128
+                           autofocus="true"></input>
+            <tr>
+                <th><label for="signinInputPassword">Password:</label></th>
+                <td><input id="signinInputPassword" name="PASSWORD" type="password"></input>
+            <tr>
+                <td>&nbsp;</td>
+                <td>
+                    <button id="signinButton" class="preferredButton" type="button">Sign In</button>
+                </td>
+        </table>
+    </form>
+
+    <p class="actionDesc">
+        Forgot Password
+    <form name="signin" action="#">
+        <table class="login">
+            <tr>
+                <th><label for="forgotInputEmail">Email address:</label></th>
+                <td><input id="forgotInputEmail" name="EMAIL" type="email" size=40 maxlength=128
+                           autofocus="true"></input>
+            <tr>
+                <td>&nbsp;</td>
+                <td>
+                    <button id="forgotButton" class="preferredButton" type="button">Forgot Password</button>
+                </td>
         </table>
     </form>
 
@@ -26,37 +48,86 @@
         receive an email with a temporary password within a few moments.
     <form name="signup" action="#">
         <table class="login">
-        <tr><th><label for="EMAIL">Email address:</label></th>
-            <td><input id="signupInputEmail" name="EMAIL" type="email" size=40 maxlength=128></input>
-        <tr><td>&nbsp;</td>
-            <td> <button id="signupButton" class="secondaryButton" type="button">Sign Up</button> </td>
+            <tr>
+                <th><label for="signupInputEmail">Email address:</label></th>
+                <td><input id="signupInputEmail" name="EMAIL" type="email" size=40 maxlength=128></input>
+            <tr>
+                <td>&nbsp;</td>
+                <td>
+                    <button id="signupButton" class="secondaryButton" type="button">Sign Up</button>
+                </td>
         </table>
     </form>
 
+    <p class="actionDesc">
+        Confirm password change
+    <form name="signin" action="#">
+        <table class="login">
+            <tr>
+                <th><label for="verificationEmail">Email address:</label></th>
+                <td><input id="verificationEmail" name="EMAIL" type="email" size=40 maxlength=128
+                           autofocus="true"></input>
+            <tr>
+                <th><label for="verificationCode">Verification Code:</label></th>
+                <td><input id="verificationCode" name="VERIFICATION" type="text"></input>
+            <tr>
+                <td>&nbsp;</td>
+                <td>
+                    <button id="verificationButton" class="preferredButton" type="button">Verify</button>
+                </td>
+        </table>
+    </form>
 </div>
 
 <script type="text/javascript" src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
 <script type="text/javascript">
-    $(document).ready(function() {
+    $(document).ready(function () {
 
-        $("#signinButton").click(function(event) {
+        $("#signinButton").click(function (event) {
             doSignIn($("#signinInputEmail").val(), $("#signinInputPassword").val());
             event.preventDefault();
         });
 
-        $("#signupButton").click(function(event) {
+        $("#forgotButton").click(function (event) {
+            doForgotPassword($("#forgotInputEmail").val());
+            event.preventDefault();
+        });
+
+        $("#signupButton").click(function (event) {
             doSignUp($("#signupInputEmail").val());
             event.preventDefault();
         });
 
+        $("#verificationButton").click(function (event) {
+            doVerification($("#verificationEmail").val(), $("#verificationCode").val());
+            event.preventDefault();
+        });
 
         function doSignIn(email, password) {
             console.log("about to sign in; username = " + email);
-            $.post("signin", { EMAIL: email, PASSWORD: password })
-             .done(handleSignInResult)
-             .fail(function() {
-                 alert("error when attempting to sign-in");
-             });
+            $.post("signin", {EMAIL: email, PASSWORD: password})
+                .done(handleSignInResult)
+                .fail(function () {
+                    alert("error when attempting to sign-in");
+                });
+        }
+
+        function doVerification(email, code) {
+            console.log("about to sign in; username = " + email);
+            $.post("verificationCode", {EMAIL: email, PASSWORD: code})
+                .done(window.location('signin.html'))
+                .fail(function () {
+                    alert("error when attempting to verificationCode");
+                });
+        }
+
+        function doForgotPassword(email) {
+            console.log("about to forgot password; username = " + email);
+            $.post("forgotPassword", {EMAIL: email})
+                .done(window.location('signin.html'))
+                .fail(function () {
+                    alert("error when attempting to forgot password");
+                });
         }
 
         function handleSignInResult(response) {
@@ -80,11 +151,11 @@
 
         function doSignUp(email) {
             console.log("about to sign up; username = " + email);
-            $.post("signup", { EMAIL: email })
-            .done(handleSignUpResult)
-            .fail(function() {
-                alert("error when attempting to sign-up");
-            });
+            $.post("signup", {EMAIL: email})
+                .done(handleSignUpResult)
+                .fail(function () {
+                    alert("error when attempting to sign-up");
+                });
         }
 
         function handleSignUpResult(response) {

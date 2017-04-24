@@ -78,7 +78,7 @@ public class ValidatedAction extends AbstractCognitoServlet
             AdminListGroupsForUserRequest listGroups = new AdminListGroupsForUserRequest();
             listGroups.setUsername(authResponse.getUsername());
             listGroups.setLimit(50);
-            listGroups.setUserPoolId("us-east-1_CoFdD3D0I");
+            listGroups.setUserPoolId(cognitoPoolId());
             AdminListGroupsForUserResult result = cognitoClient.adminListGroupsForUser(listGroups);
 
             logger.debug(" - Groups:");

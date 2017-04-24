@@ -40,6 +40,7 @@ public class SignIn extends AbstractCognitoServlet
         {
             Map<String,String> authParams = new HashMap<String,String>();
             authParams.put("USERNAME", emailAddress);
+            authParams.put("EMAIL", emailAddress);
             authParams.put("PASSWORD", password);
 
             AdminInitiateAuthRequest authRequest = new AdminInitiateAuthRequest()
